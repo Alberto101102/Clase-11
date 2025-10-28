@@ -207,6 +207,9 @@
                 </thead>
                 <tbody id="jp"></tbody>
             </table>
+            
+                       <div class="mapas" id="mapaJP"></div> 
+            
             <h2>En México</h2>
             <table>
                 <thead>
@@ -227,6 +230,9 @@
                 </thead>
                 <tbody id="mx"></tbody>
             </table>
+            
+                                   <div class="mapas" id="mapaMX"></div> 
+            
             <h2>En Rusia</h2>
             <table>
                 <thead>
@@ -247,6 +253,9 @@
                 </thead>
                 <tbody id="ru"></tbody>
             </table>
+            
+               <div class="mapas" id="mapaRS"></div> 
+            
             <h2>Resumen</h2>
             <p>Registros sobre 2.5 M de la última semana:</p>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50" id="viz"></svg>
@@ -273,12 +282,33 @@
                     console.log(temblores);
 
                     //acá meto el mapa
-                    const mapaChile = L.map("mapaCL").setView([-33.4488897, -70.6692655], 3);
-                    const tiles = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                    const mapaChile = L.map("mapaCL").setView([-33.4422116, -70.6406473], 4);
+                    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
                         maxZoom: 19,
                         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
                     }).addTo(mapaChile);
+                    
+                    //acá meto el mapa de Japón
+                    const mapaJapon = L.map("mapaJP").setView([35.5995352, 140.0780254], 4);
+                    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                    }).addTo(mapaJapon);
 
+                    //acá meto el mapa de México
+                    const mapaMexico = L.map("mapaMX").setView([19.365497, -99.1435029], 4);
+                    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                    }).addTo(mapaMexico);
+                    
+                    //acá meto el mapa de Rusia
+                    const mapaRusia = L.map("mapaRS").setView([64.9279212, 100.6386847], 2);
+                    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                    }).addTo(mapaRusia);
+                    
                     temblores.forEach((t) => {
                         //si es que dice Chile en el place
                         if (t.properties.place.includes("Chile") && t.properties.mag > 3.9) {
@@ -300,8 +330,9 @@
                             <td>${magnitud(t.properties.mag)}</td>
                             <td>${tsunami(t.properties.tsunami)}</td>
                         </tr>`;
-                            conteoMexicanos++;
+                            conteoMexicanos++;L.marker([t.geometry.coordinates[1], t.geometry.coordinates[0]]).addTo(mapaMexico).bindPopup(t.properties.place);
                         }
+                        
                         //si es que dice Japan en el place
                         if (t.properties.place.includes("Japan") && t.properties.mag > 3.9) {
                             japoneses.innerHTML += `<tr>
@@ -310,8 +341,9 @@
                             <td>${magnitud(t.properties.mag)}</td>
                             <td>${tsunami(t.properties.tsunami)}</td>
                         </tr>`;
-                            conteoJaponeses++;
+                            conteoJaponeses++;L.marker([t.geometry.coordinates[1], t.geometry.coordinates[0]]).addTo(mapaJapon).bindPopup(t.properties.place);
                         }
+                        
                         //si es que dice Russia en el place
                         if (t.properties.place.includes("Russia") && t.properties.mag > 3.9) {
                             rusos.innerHTML += `<tr>
@@ -320,31 +352,32 @@
                             <td>${magnitud(t.properties.mag)}</td>
                             <td>${tsunami(t.properties.tsunami)}</td>
                         </tr>`;
-                            conteoRusos++;
+                            conteoRusos++;L.marker([t.geometry.coordinates[1], t.geometry.coordinates[0]]).addTo(mapaRusia).bindPopup(t.properties.place);
                         }
+                        
                     });
-
+const divido = conteoChilenos/3
                     document.getElementById("viz").innerHTML = `<g><circle cx="10" cy="25" r="${
-                        conteoChilenos / 2
+                        conteoChilenos / divido
                     }" fill="#2A86BF"></circle><text x="10" y="25" font-size="1.5" dominant-baseline="middle" text-anchor="middle" fill="white">${conteoChilenos}</text><text x="10" y="45" font-size="2" dominant-baseline="middle" text-anchor="middle">Chile</text><g>`;
 
                     document.getElementById("viz").innerHTML += `<g transform="translate(25)"><circle cx="10" cy="25" r="${
-                        conteoJaponeses / 2
+                        conteoJaponeses / divido
                     }" fill="#2A86BF"></circle><text x="10" y="25" font-size="1.5" dominant-baseline="middle" text-anchor="middle" fill="white">${conteoJaponeses}</text><text x="10" y="45" font-size="2" dominant-baseline="middle" text-anchor="middle">Japón</text><g>`;
 
                     document.getElementById("viz").innerHTML += `<g transform="translate(50)"><circle cx="10" cy="25" r="${
-                        conteoMexicanos / 2
+                        conteoMexicanos / divido
                     }" fill="#2A86BF"></circle><text x="10" y="25" font-size="1.5" dominant-baseline="middle" text-anchor="middle" fill="white">${conteoMexicanos}</text><text x="10" y="45" font-size="2" dominant-baseline="middle" text-anchor="middle">México</text><g>`;
 
                     document.getElementById("viz").innerHTML += `<g transform="translate(75)"><circle cx="10" cy="25" r="${
-                        conteoRusos / 2
+                        conteoRusos / divido
                     }" fill="#2A86BF"></circle><text x="10" y="25" font-size="1.5" dominant-baseline="middle" text-anchor="middle" fill="white">${conteoRusos}</text><text x="10" y="45" font-size="2" dominant-baseline="middle" text-anchor="middle">Rusia</text><g>`;
                 } catch (error) {
                     console.error("Error al cargar los datos:", error);
                 }
             }
 
-            datos("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojson");
+            datos("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.geojson");
 
             function magnitud(x) {
                 var numero = x;

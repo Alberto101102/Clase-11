@@ -248,7 +248,7 @@
                 >, y lo ya preparado en este código fuente, que entra al <code>features:[]</code> para obtener los
                 datos, podemos visualizar lo que sigue:
             </p>
-            <h2>En Chile</h2>
+            <h2>En Rusia</h2>
             <table>
                 <thead>
                     <tr>
@@ -266,16 +266,16 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody id="cl"></tbody>
+                <tbody id="ru"></tbody>
             </table>
 
-            <div class="mapas" id="mapaCL"></div>
+            <div class="mapas" id="mapaRU"></div>
 
-            <h2>Chile comparando con otros países</h2>
+            <h2>Rusia comparando con otros países</h2>
             <p>Registros sobre 3.9 M del último mes, comparado con Japón y México</p>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 0 90 50" id="viz"></svg>
 
-            <h2>Historia de terremotos en Chile</h2>
+            <h2>Historia de terremotos en Rusia</h2>
 
             <p class="lead">
                 Chile se encuentra ubicado en el Cinturón de Fuego del Pacífico, una de las zonas sísmicas más activas del planeta. Esta posición geográfica ha marcado profundamente la historia del país, con eventos sísmicos que han dejado huellas imborrables en su desarrollo urbano, social y cultural.
@@ -345,10 +345,10 @@
         </div>
         <script>
            
-            const chilenos = document.getElementById("cl");
+            const rusos = document.getElementById("ru");
          
             
-            var conteoChilenos = 0;
+            var conteoRusos = 0;
             var conteoMexicanos = 0;
             var conteoJaponeses = 0;
 
@@ -386,27 +386,27 @@
                     console.log(temblores);
 
                     // Crear el mapa
-                    const mapaChile = L.map("mapaCL").setView([-33.4422116, -70.6406473], 3);
+                    const mapaRussia = L.map("mapaRU").setView([-33.4422116, -70.6406473], 3);
                     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
                         maxZoom: 19,
                         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-                    }).addTo(mapaChile);
+                    }).addTo(mapaRussia);
 
                   
                     temblores.forEach((t) => {
                         
                         // Si dice Chile en el place
-                        if (t.properties.place.includes("Chile") && t.properties.mag > 3.9) {
-                            chilenos.innerHTML += `<tr>
+                        if (t.properties.place.includes("Russia") && t.properties.mag > 3.9) {
+                            rusos.innerHTML += `<tr>
                                 <td><a href="${t.properties.url}" target="_blank">${t.properties.place}</a></td>
                                 <td>${tiempo(t.properties.time)}</td>
                                 <td>${magnitud(t.properties.mag)}</td>
                                 <td>${tsunami(t.properties.tsunami)}</td>
                             </tr>`;
-                            conteoChilenos++;
+                            conteoRusos++;
                            
                             L.marker([t.geometry.coordinates[1], t.geometry.coordinates[0]])
-                                .addTo(mapaChile)
+                                .addTo(mapaRussia)
                                 .bindPopup(t.properties.place);
                         }
                         
@@ -423,10 +423,10 @@
                         
                     });
                     
-                 const divido = conteoChilenos/10
+                 const divido = conteoRusos/10
                     document.getElementById("viz").innerHTML = `<g><circle cx="10" cy="25" r="${
-                        conteoChilenos / divido
-                    }" fill="#2b2abf"></circle><text x="10" y="25" font-size="1.5" dominant-baseline="middle" text-anchor="middle" fill="white">${conteoChilenos}</text><text x="10" y="45" font-size="2" dominant-baseline="middle" text-anchor="middle">Chile</text><g>`;
+                        conteoRusos / divido
+                    }" fill="#2b2abf"></circle><text x="10" y="25" font-size="1.5" dominant-baseline="middle" text-anchor="middle" fill="white">${conteoRusos}</text><text x="10" y="45" font-size="2" dominant-baseline="middle" text-anchor="middle">Rusia</text><g>`;
 
                     document.getElementById("viz").innerHTML += `<g transform="translate(25)"><circle cx="10" cy="25" r="${
                         conteoJaponeses / divido
@@ -439,7 +439,7 @@
                     
                     
 
-                    console.log("Temblores en Chile encontrados:", conteoChilenos);
+                    console.log("Temblores en Rusia encontrados:", conteoRusos);
                 } catch (error) {
                     console.error("Error al obtener los datos:", error);
                     chilenos.innerHTML = '<tr><td colspan="4">Error al cargar los datos</td></tr>';
